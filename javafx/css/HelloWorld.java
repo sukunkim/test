@@ -29,7 +29,8 @@ public class HelloWorld extends Application {
     grid.setGridLinesVisible(true);
 
     Text scenetitle = new Text("Welcome");
-    scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+//    scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+    scenetitle.setId("welcome-text");
     grid.add(scenetitle, 0, 0, 2, 1);
 
     Label userName = new Label("User Name:");
@@ -52,18 +53,20 @@ public class HelloWorld extends Application {
     grid.add(hbBtn, 1, 4);
 
     final Text actiontarget = new Text();
+    actiontarget.setId("actiontarget");
     grid.add(actiontarget, 1, 6);
 
     btn.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        actiontarget.setFill(Color.FIREBRICK);
+//        actiontarget.setFill(Color.FIREBRICK);
 	actiontarget.setText("Sign in button pressed");
         System.out.println("Hello World!");
       }
     });
 
     Scene scene = new Scene(grid, 300, 275);
+    scene.getStylesheets().add("css.css");
 
     primaryStage.setScene(scene);
     primaryStage.setTitle("JavaFX Welcome");
