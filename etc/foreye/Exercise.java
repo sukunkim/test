@@ -6,7 +6,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -27,7 +26,7 @@ public class Exercise extends Application {
   private final static double RECTANGLE_PADDING = 20;
   private final static Color RECTANGLE_COLOR = Color.SEAGREEN;
 
-  private final static double DEFAULT_DURATION = 1 * 1000;
+  private final static double DEFAULT_DURATION = 5 * 1000;
 
   private Pane pane;
   private Slider slider;
@@ -52,6 +51,7 @@ public class Exercise extends Application {
 
     HBox hBox = new HBox();
     hBox.setPadding(new Insets(10, 10, 10, 10));
+    hBox.setStyle("-fx-background-color: gray;");
     gridPane.add(hBox, 0, 0);
 
     pane = new Pane();
