@@ -1,28 +1,70 @@
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.TestReporter;
+
+import org.junit.jupiter.api.condition.DisabledOnJre;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledIf;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junit.jupiter.api.condition.EnabledOnJre;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.JRE;
+import org.junit.jupiter.api.condition.OS;
+
+import org.junit.jupiter.api.extension.ExtensionContext;
 
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.EnumSource.Mode;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 public class JUnit5Tests {
 
   @Test
-  void test1() {
+  @EnabledOnJre(JRE.JAVA_8)
+  @EnabledOnOs(OS.WINDOWS)
+  void test1(TestInfo testInfo) {
+    assertEquals("test1(TestInfo)", testInfo.getDisplayName());
     assumeTrue(false);
     assertEquals(2, 1 + 1);
   }
 
   @Test
-  void test2() {
+  @DisabledOnJre(JRE.JAVA_9)
+  @DisabledOnOs(OS.LINUX)
+  void test2(TestReporter testReporter) {
+    testReporter.publishEntry("a key", "a value");
     assertEquals(2, 1 + 2);
     assertEquals(2, 1 + 3);
   }
 
   @Test
+  @EnabledIfSystemProperty(named = "os.arch", matches = ".*86.*")
+  @EnabledIfEnvironmentVariable(named = "USERDOMAIN", matches = "HURACAN")
   void groupedAssertions() {
     assertAll(() -> assertEquals(2, 1), () -> assertEquals(2, 3));
   }
@@ -30,14 +72,110 @@ public class JUnit5Tests {
   @Nested
   class TimerTest {
     @Test
+    @EnabledIf("2 * 3 == 6")
     void test11() {
       assertEquals(3, 1 + 2);
     }
   }
+}
 
-  @ParameterizedTest
-  @ValueSource(ints = {6, 7, 8})
-  void findById(Integer id) {
-    assertEquals(id, id);
+class RepetitionTests {
+  @BeforeEach
+  void beforeEach(TestInfo testInfo, RepetitionInfo repetitionInfo) {
+    int currentRepetition = repetitionInfo.getCurrentRepetition();
+    int totalRepetition = repetitionInfo.getTotalRepetitions();
+    System.out.println(
+      "Repetition " + currentRepetition + " of " + totalRepetition);
+  }
+
+  @RepeatedTest(value = 3, name = RepeatedTest.LONG_DISPLAY_NAME)
+  void repeatedTest() {
+    assertEquals(4, 1 + 3);
+  }
+
+  @RepeatedTest(value = 1, name = "{displayName} {currentRepetition}/{totalRepetitions}")
+  @DisplayName("Repeat!")
+  void customDisplayName(TestInfo testInfo) {
+    assertEquals(testInfo.getDisplayName(), "Repeat! 1/1");
   }
 }
+
+class ParameterTests {
+  @ParameterizedTest
+  @ValueSource(ints = {1, 2, 3})
+  void testWithValueSource(int argument) {
+    assertTrue(argument > 0 && argument < 4);
+  }
+
+  @ParameterizedTest
+  @EnumSource(value = TimeUnit.class, mode = Mode.MATCH_ALL, names = ".*SECONDS")
+  void testWithEnumSource(TimeUnit timeUnit) {
+    System.out.println("timeUnit = " + timeUnit);
+  }
+
+  @ParameterizedTest
+  @MethodSource("stringProvider")
+  void testWithMethodSource(String argument) {
+    assertNotNull(argument);
+  }
+
+  static Stream<String> stringProvider() {
+    return Stream.of("foo", "bar");
+  }
+
+  @ParameterizedTest
+  @MethodSource("stringIntAndListProvider")
+  void testWithMultiArgMethodSource(String str, int num, List<String> list) {
+    assertEquals(3, str.length());
+    assertTrue(num >= 1 & num <= 2);
+    assertEquals(2, list.size());
+  }
+
+  static Stream<Arguments> stringIntAndListProvider() {
+    return Stream.of(
+      Arguments.of("foo", 1, Arrays.asList("a", "b")),
+      Arguments.of("bar", 2, Arrays.asList("x", "y", "z"))
+      );
+  }
+
+  @ParameterizedTest
+  @CsvSource({ "foo, 1", "bar, 2", "'baz, qux', 0" })
+  void testWithCsvSource(String first, int second) {
+    assertNotNull(first);
+    assertNotEquals(0, second);
+  }
+
+  @ParameterizedTest
+  @ArgumentsSource(MyArgumentsProvider.class)
+  void testWithArgumentsSource(String str, int num) {
+    assertEquals(3, str.length());
+    assertTrue(num >= 1 & num <= 2);
+  }
+
+  static class MyArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<? extends Arguments> provideArguments(
+      ExtensionContext context) {
+      return Stream.of(
+        Arguments.of("foo", 1),
+	Arguments.of("bar", 3)
+	);
+    }
+  }
+}
+
+/*
+interface TestLifecycleLogger {
+  @BeforeEach
+  default void beforeEachTest() {
+    System.out.println("beforeEachTest");
+  }
+}
+
+class TestInterfaceDemo implements TestLifecycleLogger {
+  @Test
+  void isEqualValue() {
+    assertEquals(1, 2, "is always equal");
+  }
+}
+*/
