@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -8,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +35,11 @@ import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.converter.ArgumentConverter;
+import org.junit.jupiter.params.converter.ConvertWith;
+import org.junit.jupiter.params.converter.JavaTimeConversionPattern;
+import org.junit.jupiter.params.converter.ConvertWith;
+import org.junit.jupiter.params.converter.SimpleArgumentConverter;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
@@ -41,6 +48,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
 
 public class JUnit5Tests {
 
@@ -79,7 +87,9 @@ public class JUnit5Tests {
   }
 }
 
+
 class RepetitionTests {
+
   @BeforeEach
   void beforeEach(TestInfo testInfo, RepetitionInfo repetitionInfo) {
     int currentRepetition = repetitionInfo.getCurrentRepetition();
@@ -100,7 +110,9 @@ class RepetitionTests {
   }
 }
 
+
 class ParameterTests {
+
   @ParameterizedTest
   @ValueSource(ints = {1, 2, 3})
   void testWithValueSource(int argument) {
@@ -115,7 +127,8 @@ class ParameterTests {
 
   @ParameterizedTest
   @MethodSource("stringProvider")
-  void testWithMethodSource(String argument) {
+  void testWithMethodSource(String argument, TestReporter testReporter) {
+    testReporter.publishEntry("argument", argument);
     assertNotNull(argument);
   }
 
@@ -138,7 +151,7 @@ class ParameterTests {
       );
   }
 
-  @ParameterizedTest
+  @ParameterizedTest(name = "{index} ==> first =''{0}'', second={1}")
   @CsvSource({ "foo, 1", "bar, 2", "'baz, qux', 0" })
   void testWithCsvSource(String first, int second) {
     assertNotNull(first);
@@ -163,6 +176,64 @@ class ParameterTests {
     }
   }
 }
+
+
+class ConversionTests {
+
+  @ParameterizedTest
+  @ValueSource(strings = "42 cats")
+  void testWithImplicitConversion(Book book) {
+    assertEquals("42 cats", book.getTitle());
+  }
+
+  static class Book {
+    private final String title;
+
+    public Book(String title) {
+      this.title = title;
+      System.out.println("Constructor");
+    }
+
+    public static Book fromTitle(String title) {
+      System.out.println("Factory");
+      return new Book(title);
+    }
+
+    public String getTitle() {
+      return title;
+    }
+  }
+
+  @ParameterizedTest
+  @EnumSource(TimeUnit.class)
+  void testWithExplicitConversion(
+    @ConvertWith(ToStringArgumentConverter.class) String argument) {
+
+    System.out.println(argument);
+    assertNotNull(TimeUnit.valueOf(argument));
+  }
+
+  static class ToStringArgumentConverter extends SimpleArgumentConverter {
+    @Override
+    protected Object convert(Object source, Class<?> targetType) {
+      assertEquals(String.class, targetType, "Can only convert to String");
+      return String.valueOf(source);
+    }
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "01.01.2017", "31.12.2017" })
+  void testWithExplicitTime(
+    @JavaTimeConversionPattern("dd.MM.yyyy") LocalDate argument) {
+    assertEquals(2017, argument.getYear());
+  }
+
+  @BeforeEach
+  void beforeEach(TestInfo testInfo) {
+    System.out.println(testInfo.getDisplayName());
+  }
+}
+
 
 /*
 interface TestLifecycleLogger {
