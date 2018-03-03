@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestReporter;
 
@@ -232,6 +233,10 @@ class ConversionTests {
   void beforeEach(TestInfo testInfo) {
     System.out.println(testInfo.getDisplayName());
   }
+}
+
+
+class DynamicFactoryTests {
 }
 
 
