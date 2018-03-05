@@ -21,16 +21,24 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.api.DynamicContainer.dynamicContainer;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
+import static org.junit.jupiter.api.TestInstance.Lifecycle;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestReporter;
 
 import org.junit.jupiter.api.condition.DisabledOnJre;
@@ -43,6 +51,7 @@ import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.api.condition.OS;
 
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import org.junit.jupiter.api.function.ThrowingConsumer;
@@ -68,6 +77,7 @@ public class JUnit5Tests {
   @Test
   @EnabledOnJre(JRE.JAVA_8)
   @EnabledOnOs(OS.WINDOWS)
+  @Tag("foo")
   void test1(TestInfo testInfo) {
     assertEquals("test1(TestInfo)", testInfo.getDisplayName());
     assumeTrue(false);
@@ -77,6 +87,7 @@ public class JUnit5Tests {
   @Test
   @DisabledOnJre(JRE.JAVA_9)
   @DisabledOnOs(OS.LINUX)
+  @Tag("bar")
   void test2(TestReporter testReporter) {
     testReporter.publishEntry("a key", "a value");
     assertEquals(2, 1 + 2);
@@ -249,6 +260,7 @@ class ConversionTests {
 
 
 class DynamicFactoryTests {
+
   @TestFactory
   List<String> dynamicTestsWithInvalidReturnType() {
     return Arrays.asList("Hello");
@@ -324,31 +336,71 @@ class DynamicFactoryTests {
   }
 
   @TestFactory
-  Stream<DynamicTest> dynamicTestsWithContainers() {
+  Stream<DynamicNode> dynamicTestsWithContainers() {
     return Stream.of("A", "B", "C")
-      .map(input -> //dynamicContainer("Container " + input, Stream.of(
-        //dynamicTest("not null", () -> assertNotNull(input)),
+      .map(input -> dynamicContainer("Container " + input, Stream.of(
+        dynamicTest("not null", () -> assertNotNull(input)),
 	dynamicContainer("properties", Stream.of(
 	  dynamicTest("length > 0", () -> assertTrue(input.length() > 0)),
 	  dynamicTest("non empty", () -> assertFalse(input.isEmpty()))
-	  //))
+	  ))
 	)));
   }
 }
 
 
-/*
+@TestInstance(Lifecycle.PER_CLASS)
+@Tag("interface_test")
 interface TestLifecycleLogger {
+
+  @BeforeAll
+  default void beforeAllTests() {
+    System.out.println("Before all tests");
+  }
+
+  @AfterAll
+  default void afterAllTests() {
+    System.out.println("After all tests");
+  }
+
   @BeforeEach
-  default void beforeEachTest() {
-    System.out.println("beforeEachTest");
+  default void beforeEachTest(TestInfo testInfo) {
+    System.out.println(
+      String.format("About to execute [%s]", testInfo.getDisplayName()));
+  }
+
+  @AfterEach
+  default void afterEachTest(TestInfo testInfo) {
+    System.out.println(
+      String.format("Finished executing [%s]", testInfo.getDisplayName()));
   }
 }
 
-class TestInterfaceDemo implements TestLifecycleLogger {
+interface TestDynamic {
+
+  @TestFactory
+  default Collection<DynamicTest> dynamicTestsFromCollection() {
+    return Arrays.asList(
+      dynamicTest("1st dynamic test in test interface", () -> assertTrue(true)),
+      dynamicTest("2nd dynamic test in test interface", () -> assertEquals(4, 2 * 2))
+      );
+  }
+}
+
+@Tag("timed")
+//@ExtendWith(TimingExtension.class)
+interface TimeExecutionLogger {
+}
+
+class LifecycleLoggerTests implements TestLifecycleLogger, TestDynamic, TimeExecutionLogger {
+
   @Test
   void isEqualValue() {
     assertEquals(1, 2, "is always equal");
   }
+
+  @Test
+  void isFalse() {
+    assertFalse(true, "is always false");
+  }
 }
-*/
