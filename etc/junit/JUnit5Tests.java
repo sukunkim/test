@@ -1,3 +1,4 @@
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
@@ -51,8 +52,12 @@ import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.api.condition.OS;
 
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
+import org.junit.jupiter.api.extension.ExtensionContext.Store;
 
 import org.junit.jupiter.api.function.ThrowingConsumer;
 
@@ -388,7 +393,7 @@ interface TestDynamic {
 }
 
 @Tag("timed")
-//@ExtendWith(TimingExtension.class)
+@ExtendWith(TimingExtension.class)
 interface TimeExecutionLogger {
 }
 
@@ -402,5 +407,45 @@ class LifecycleLoggerTests implements TestLifecycleLogger, TestDynamic, TimeExec
   @Test
   void isFalse() {
     assertFalse(true, "is always false");
+  }
+}
+
+
+
+class TimingExtension implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
+
+  private static final String START_TIME = "start time";
+
+  @Override
+  public void beforeTestExecution(ExtensionContext context) throws Exception {
+    getStore(context).put(START_TIME, System.currentTimeMillis());
+  }
+
+  @Override
+  public void afterTestExecution(ExtensionContext context) throws Exception {
+    Method testMethod = context.getRequiredTestMethod();
+    long startTime = getStore(context).remove(START_TIME, long.class);
+    long duration = System.currentTimeMillis() - startTime;
+    System.out.println(String.format(
+      "Method [%s] took %s ms.", testMethod.getName(), duration));
+  }
+
+  private Store getStore(ExtensionContext context) {
+    return context.getStore(
+      Namespace.create(getClass(), context.getRequiredTestMethod()));
+  }
+}
+
+@ExtendWith(TimingExtension.class)
+class TimingExtensionTests {
+
+  @Test
+  void sleep20ms() throws Exception {
+    Thread.sleep(20);
+  }
+
+  @Test
+  void sleep50ms() throws Exception {
+    Thread.sleep(50);
   }
 }
