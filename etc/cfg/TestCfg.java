@@ -34,6 +34,7 @@ public class TestCfg {
 	.configure(params.xml().setFileName("mycfg.xml")
 	  .setEntityResolver(defaultEntityResolver).setValidating(true));
 //	  .setEntityResolver(resolver).setSchemaValidation(true));
+//	  .setValidating(true));
 
     XMLConfiguration cfg = null;
     try {
