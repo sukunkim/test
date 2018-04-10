@@ -1,3 +1,0 @@
-<!ELEMENT mw_cfg (port)>
-
-<!ELEMENT port (#PCDATA)>

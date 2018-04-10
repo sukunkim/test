@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE mw_cfg SYSTEM "mwcfg.dtd">
-
-<!-- <mw_cfg xsi:schemaLocation="mycfg.xsd"> -->
-<mw_cfg>
+<mw_cfg
+xmlns="http://www.sinbinet.com/xml/iot"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.sinbinet.com/xml/iot mycfg.xsd">
 
   <port>9999</port>
 
