@@ -2,6 +2,7 @@
 # OpenThread
 
 * VMware에서 테스트
+* Nordic nRF52840으로 테스트
 
 
 ## 정보
