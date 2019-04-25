@@ -1,6 +1,7 @@
 
 # OpenThread
 
+* Ubuntu Desktop 19.04에서 테스트
 * VMware에서 테스트
 * Nordic nRF52840으로 테스트
 
