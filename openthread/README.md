@@ -10,4 +10,4 @@
 
 * [공식 홈페이지](https://openthread.io/)
 * [환경설정](https://openthread.io/guides/build)
-  * docker를 이용
+  * [docker](https://www.docker.com/)를 이용
