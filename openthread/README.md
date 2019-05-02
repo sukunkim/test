@@ -4,7 +4,8 @@
 
 ## 정보
 
-* [공식 홈페이지](https://openthread.io/)
+* [홈페이지](https://openthread.io/)
+* [GitHub](https://github.com/openthread)
 * [docker](https://www.docker.com/)
 
 
