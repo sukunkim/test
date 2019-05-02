@@ -1,13 +1,19 @@
 
 # OpenThread
 
-* Ubuntu Desktop 19.04에서 테스트
-* VMware에서 테스트
-* Nordic nRF52840으로 테스트
-
 
 ## 정보
 
 * [공식 홈페이지](https://openthread.io/)
-* [환경설정](https://openthread.io/guides/build)
-  * [docker](https://www.docker.com/)를 이용
+* [docker](https://www.docker.com/)
+
+
+## 환경
+
+* Ubuntu Desktop 19.04
+  * VMware
+* Nordic nRF52840
+
+
+## 설치
+
