@@ -11,3 +11,6 @@
     * deb http://ppa.launchpad.net/team-gcc-arm-embedded/ppa/ubuntu cosmic main
     * deb http://ppa.launchpad.net/team-gcc-arm-embedded/ppa/ubuntu bionic main
   * arm-none-eabi-addr2line가 이미 설치되어 있다는 에러는 무시
+
+* SEGGER J-Link
+  * 추가로 libncurses5를 설치
