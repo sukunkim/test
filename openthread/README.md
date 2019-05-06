@@ -14,6 +14,7 @@
 * Ubuntu Desktop 19.04
   * VMware
 * Nordic nRF52840
+  * [Nordic nRF52480 DK](https://www.nordicsemi.com/Software-and-Tools/Development-Kits/nRF52840-DK): [구매](http://www.eleparts.co.kr/goods/view?no=6779185)
 
 
 ## [설치](installation.md)
