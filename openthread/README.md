@@ -11,7 +11,7 @@
 
 ## 환경
 
-* Ubuntu Desktop 19.04
+* Ubuntu Desktop 19.04 (Disco Dingo)
   * VMware
 * Nordic nRF52840
   * ARM Cortex-M4
