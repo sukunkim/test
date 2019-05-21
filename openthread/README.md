@@ -22,4 +22,4 @@
 ## [설치](installation.md)
 
 
-## [Tutorial](tutorial.md)
+## [Tutorial](tutorial/)
