@@ -14,6 +14,8 @@
     * make -f examples/Makefile-nrf52840 BORDER_AGENT=1 BORDER_ROUTER=1 COMMISSIONER=1 UDP_FORWARD=1 USB=1 LINK_RAW=1
   * Network Name이 기본값과는 다른 값으로 변경되어야 Android App에서 Border Router를 인식
   * joiner start J01NU5가 동작하지 않고, 이후 부분도 동작하지 않음
+    * Join failed [NotFound]
+    * NCP를 make할 때 TMF_PROXY=1 옵션이 추가되어도 여전히 동작하지 않음
 
 
 ## [API Codelab 코드](api_codelab/)
