@@ -17,10 +17,14 @@
     * ```Join failed [NotFound]```
     * NCP를 make할 때 TMF_PROXY=1 옵션이 추가되어도 여전히 동작하지 않음
 * Border Router with Docker
-  * Run OTBR Docker의 Emulated NCP의 Start the POSIX NCP에서, x86_64-unknown-linux-gnu 대신 armv7l-unknown-linux-gnueabihf
-    * ```~/openthread/output/armv7l-unknown-linux-gnueabihf/bin/ot-ncp-ftd 1 > /dev/pts/2 < /dev/pts/2```
-  * Test Connectivity의 Emulated Thread node에서 오타
-    * ```./output/x86_64-unknown-linux-gnu/bin/ot-cli-ftd 2```
+  * Run OTBR Docker의 Emulated NCP
+    * Raspberry Pi가 사용될 경우 x86_64-unknown-linux-gnu 대신 armv7l-unknown-linux-gnueabihf
+      * ```~/openthread/output/armv7l-unknown-linux-gnueabihf/bin/ot-ncp-ftd 1 > /dev/pts/2 < /dev/pts/2```
+  * Test Connectivity의 Emulated Thread node
+    * 오타
+      * ```./output/x86_64-unknown-linux-gnu/bin/ot-cli-ftd 2```
+    * Raspberry Pi가 사용될 경우 x86_64-unknown-linux-gnu 대신 armv7l-unknown-linux-gnueabihf
+      * ```./output/armv7l-unknown-linux-gnueabihf/bin/ot-cli-ftd 2```
 
 
 ## [API Codelab 코드](api_codelab/)
