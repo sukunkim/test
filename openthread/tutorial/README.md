@@ -16,6 +16,9 @@
   * joiner start J01NU5가 동작하지 않고, 이후 부분도 동작하지 않음
     * Join failed [NotFound]
     * NCP를 make할 때 TMF_PROXY=1 옵션이 추가되어도 여전히 동작하지 않음
+* Border Router with Docker
+  * Emulated NCP의 Start the POSIX NCP에서, x86_64-unknown-linux-gnu 대신 armv7l-unknown-linux-gnueabihf
+    * ~/openthread/output/armv7l-unknown-linux-gnueabihf/bin/ot-ncp-ftd 1 > /dev/pts/2 < /dev/pts/2
 
 
 ## [API Codelab 코드](api_codelab/)
