@@ -25,6 +25,11 @@
       * ```./output/x86_64-unknown-linux-gnu/bin/ot-cli-ftd 2```
     * Raspberry Pi가 사용될 경우 x86_64-unknown-linux-gnu 대신 armv7l-unknown-linux-gnueabihf
       * ```./output/armv7l-unknown-linux-gnueabihf/bin/ot-cli-ftd 2```
+  * 결과
+    * x86_64 + emulated: 2번 FTD의 state가 router로 변경되지 않음
+    * x86_64 + nRF52840: 2번 FTD에서 외부로 ping이 되지 않음 (내부는 되는 것 같음)
+    * armv71 + emulated: OTBR docker가 시작되지 않음
+    * armv71 + nRF52840: OTBR docker가 시작되지 않음
 
 
 ## [API Codelab 코드](api_codelab/)
