@@ -28,6 +28,11 @@
     * x86_64 + nRF52840: 2번 FTD에서 외부로 ping이 되지 않음 (내부는 되는 것 같음)
     * armv71 + emulated: OTBR docker가 시작되지 않음
     * armv71 + nRF52840: OTBR docker가 시작되지 않음
+* NCP Support
+  * Packet Sniffing
+    * Pre-Built NCP Firmware에 나온 것처럼 node가 설정되어도 괜찮음
+      * ```make -f examples/Makefile-nrf52840 BORDER_AGENT=1 BORDER_ROUTER=1 COMMISSIONER=1 UDP_FORWARD=1 USB=1 LINK_RAW=1```
+      * ot-ncp-ftd.hex 사용
 
 
 ## [API Codelab 코드](api_codelab/)
