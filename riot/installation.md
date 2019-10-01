@@ -30,3 +30,4 @@ pip3 install pyserial
 * 편의를 위해, RIOT/boards/cc2650stk/Makefile.include에 다음을 추가
   * `export UNIFLASH_PATH = /opt/ti/uniflash_5.1.0/`
 * CR2032 배터리가 장착되어야 flash에 write할 수 있음
+* shell이 동작하지 않음
