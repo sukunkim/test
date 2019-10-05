@@ -2,6 +2,12 @@
 # RIOT
 
 
+## 정보
+
+* [홈페이지]()
+* [GitHub]()
+
+
 ## 환경
 
 * Ubuntu Desktop 19.04 (Disco Dingo)
