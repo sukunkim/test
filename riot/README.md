@@ -4,8 +4,8 @@
 
 ## 정보
 
-* [홈페이지]()
-* [GitHub]()
+* [홈페이지](https://riot-os.org/)
+* [GitHub](https://github.com/RIOT-OS/)
 
 
 ## 환경
