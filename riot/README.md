@@ -17,6 +17,8 @@
   * IEEE802.15.4, Bluetooth 5, NFC-A
   * [Nordic nRF52480 DK](https://www.nordicsemi.com/Software-and-Tools/Development-Kits/nRF52840-DK): [구매](http://www.eleparts.co.kr/goods/view?no=6779185)
 * TI CC2650
+  * ARM Cortext-M3
+  * IEEE 802.15.4, Bluetooth 4.2
 
 
 ## [설치](installation.md)
