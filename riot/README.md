@@ -19,6 +19,7 @@
 * TI CC2650
   * ARM Cortext-M3
   * IEEE 802.15.4, Bluetooth 4.2
+  * TI CC2650STK
 
 
 ## [설치](installation.md)
