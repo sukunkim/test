@@ -19,7 +19,7 @@
 * TI CC2650
   * ARM Cortext-M3
   * IEEE 802.15.4, Bluetooth 4.2
-  * [TI CC2650STK](http://www.ti.com/tool/CC2650STK)
+  * [TI CC2650STK](http://www.ti.com/tool/CC2650STK): [구매](http://www.eleparts.co.kr/goods/view?no=3455206)
 
 
 ## [설치](installation.md)
