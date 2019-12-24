@@ -36,5 +36,14 @@ public class TestDateTime {
 
     Instant timestamp = Instant.now();
     System.out.println("timestamp = " + timestamp);
+
+
+    Instant epochI = Instant.EPOCH;
+    System.out.println("EPOCH Instant = " + epochI);
+    ZoneId zoneId = ZoneId.of("UTC");
+    System.out.println("zoneId = " + zoneId);
+    ZonedDateTime epochZ
+      = ZonedDateTime.ofInstant(Instant.EPOCH, zoneId);
+    System.out.println("EPOCH ZonedDateTime = " + epochZ);
   }
 }
