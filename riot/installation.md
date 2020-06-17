@@ -9,6 +9,7 @@ sudo apt update
 sudo apt install python3-pip
 pip3 install pyserial
 ```
+* [최신 버전의 GNU Arm Embedded Toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
 * 타겟 하드웨어 별로 RIOT/boards 내 디렉터리에 doc.txt가 있음
 
 
